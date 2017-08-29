@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Reader</title>
+</head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<body>
+	<table width='100%' heigth='100%' >
+		<tr>
+			<td>
+			<input id='imgfile' type='file' onchange='showImage()'>
+			</td>
+			<td>
+			<button disabled="" id='ocr' onclick="uploadImage()">OCR IMAGE</button>
+			</td>
+
+			<td rowspan="2">
+			<textarea id='imagetext' cols='75' rows="25" style="float: right"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<img id='image' height="60%"  >
+			</td>
+
+		</tr>
+
+
+	</table>
+</body>
+<script type="text/javascript">
+		
+var fr1 = new FileReader() ;	
+var imgid;	
+function showImage() {
+	var img = document.getElementById('imgfile').files[0];
+	
+	if (FileReader && img) {
+		
+        var fr = new FileReader();
+        fr.onload = function () {
+            document.getElementById("image").src = fr.result;
+            fr1 = fr;
+        }
+        fr.readAsDataURL(img);
+
+        document.getElementById('ocr').disabled = false
+    }
+	// body...
+
+
+}
+
+function uploadImage()
+{
+
+	var img = document.getElementById('imgfile').files[0];
+	//alert(img);
+	var f = new FormData();
+	f.append("img", img);
+	alert(f);
+
+	$.ajax({
+
+				url: "/imagereader/upload/",
+				type: "POST",
+				
+				 data: f,
+				 processData: false,
+   			 	 contentType: false,
+				// headers: {'Origin': '*'},
+				//crossDomain : true,
+				//dataType: "json",
+
+
+				success: function(json)
+				{
+					alert("Sent"+json.id);
+					imgid = json.id
+					get_data();
+				}
+			
+
+		})
+}
+
+function get_data()
+{
+	$.ajax({
+
+				url: "/imagereader/"+imgid+"/get_data/",
+				type: "GET",
+				
+				 processData: false,
+   			 	 contentType: false,
+				// headers: {'Origin': '*'},
+				//crossDomain : true,
+				//dataType: "json",
+
+
+				success: function(json)
+				{
+					if(json.success == false)
+					{
+						setTimeout(get_data, 2000);
+					}
+					else
+					{
+						document.getElementById('imagetext').value = json.data;
+					}
+				}
+			
+
+		})
+}	
+
+</script>
+</html>

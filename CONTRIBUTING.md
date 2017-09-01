@@ -1,5 +1,4 @@
-﻿Setting Up the Project
-
+Setting Up the Project
 
 
 I. Installing Tesseract and Leptonica Libraries:

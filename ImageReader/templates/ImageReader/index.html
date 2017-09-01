@@ -2,11 +2,15 @@
 <html>
 <head>
 	<title>Image Reader</title>
-</head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<body>
-	<table width='100%' heigth='100%' >
+<body style="background-color: #D3D3D3">
+
+	<!-- <table width='100%' heigth='100%' >
 		<tr>
 			<td>
 			<input id='imgfile' type='file' onchange='showImage()'>
@@ -21,16 +25,60 @@
 		</tr>
 		<tr>
 			<td>
-			<img id='image' height="60%"  >
+			<img id='image'   width="100%">
 			</td>
 
 		</tr>
 
 
-	</table>
+	</table> -->
+	<input id='imgfile' type='file' onchange='showImage()'>
+	<div class="modal" id='modal' data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Please Wait....</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+          <!-- <span aria-hidden="true">&times;</span> -->
+        <!-- </button> -->
+      </div>
+      <div class="modal-body">
+        <p>Uploading to Server and recognising text...</p>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+  </div>
+  </div>
+	<div class="container-fluid">
+		<div class='row align-items-center'>
+			<div class='col'>
+			<img id='image'   width="80%">
+			</div>
+		
+		<div class='col-1'>
+			<button disabled="" id='ocr' onclick="uploadImage()" data-toggle='modal' data-target='#modal' >OCR IMAGE</button>
+		</div>
+		<div class='col'>
+			<textarea id='imagetext' rows=25 style="width:100% ;"  ></textarea>
+		</div>
+		</div>
+
+	</div>
+
+
+
+
+	<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
 </body>
 <script type="text/javascript">
 		
+
 var fr1 = new FileReader() ;	
 var imgid;	
 function showImage() {
@@ -59,7 +107,7 @@ function uploadImage()
 	//alert(img);
 	var f = new FormData();
 	f.append("img", img);
-	alert(f);
+	//alert(f);
 
 	$.ajax({
 
@@ -76,11 +124,15 @@ function uploadImage()
 
 				success: function(json)
 				{
-					alert("Sent"+json.id);
+					//alert("Sent"+json.id);
 					imgid = json.id
 					get_data();
+				},
+				
+				failure: function()
+				{
+					alert('Upload Failed. Try Again');
 				}
-			
 
 		})
 }
@@ -108,6 +160,8 @@ function get_data()
 					else
 					{
 						document.getElementById('imagetext').value = json.data;
+						//document.getElementById('modal').style.display = 'none';
+						$('#modal').modal('hide');
 					}
 				}
 			

@@ -15,6 +15,7 @@ This has been clearly explained in CONTRIBUTING.md
 ## Running the Project
 - Set up the required environment by installing the libraries mentioned in CONTRIBUTING.md
 - Download the source code
+- In OCRWebApp/OCRWebApp/settings.py , change the path MEDIA_ROOT to the (path_to_project_directory)/OCRWebApp/media
 - Install Django using `pip install django`
 - Inside the root folder, run the command `python manage.py runserver`
 - Open a Web Browswer and in the address bar, type localhost:8000/imagereader/
